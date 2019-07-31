@@ -5,6 +5,7 @@ const UPDATE_RESULT_GIF = 'UPDATE_RESULT_GIF'
 const UPDATE_IS_LOADING = 'UPDATE_IS_LOADING'
 const UPDATE_LIKED_GIFS = 'UPDATE_LIKED_GIFS'
 const UNLIKE_GIF = 'UNLIKE_GIF'
+const RESET = 'RESET'
 
 export const updateSearchTerm = term => ({
   type: UPDATE_SEARCH_TERM,
@@ -54,3 +55,5 @@ export const unlikeGIF = gif => ({
     gif,
   },
 })
+
+export const reset = () => ({ type: RESET })

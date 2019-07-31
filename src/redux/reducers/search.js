@@ -34,6 +34,8 @@ export default function(state = initialState, action) {
           ...state.likedGIFs.filter(gif => gif.id !== action.payload.gif.id),
         ],
       }
+    case 'RESET':
+      return initialState
     default:
       return state
   }
