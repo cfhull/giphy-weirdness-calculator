@@ -2,11 +2,56 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './calculator.css'
 
-const Calculator = () => (
-  <div>
-    Calculator
-    <Link to="/results">Go to Results</Link>
-  </div>
-)
+import { useSelector, useDispatch } from 'react-redux'
+
+import {
+  updateSearchTerm,
+  updateWeirdness,
+  updateResultGif,
+} from '../redux/actions.js'
+import { searchByWeirdness } from '../api'
+
+const Calculator = () => {
+  const searchTerm = useSelector(state => state.search.searchTerm)
+  const weirdness = useSelector(state => state.search.weirdness)
+  const resultGIF = useSelector(state => state.search.resultGIF)
+
+  const dispatch = useDispatch()
+
+  function search() {
+    searchByWeirdness(searchTerm, weirdness).then(data => {
+      dispatch(updateResultGif({ id: data.data.data.id }))
+    })
+  }
+
+  return (
+    <div>
+      <input
+        onChange={e => dispatch(updateSearchTerm(e.currentTarget.value))}
+        value={searchTerm}
+      />
+
+      <button type="button" onClick={search}>
+        SEARCH
+      </button>
+      <input
+        type="range"
+        min="0"
+        max="10"
+        onChange={e => dispatch(updateWeirdness(e.currentTarget.value))}
+        value={weirdness}
+      />
+      <div>
+        {resultGIF.id && (
+          <img
+            src={`http://giphygifs.s3.amazonaws.com/media/${resultGIF.id}/giphy.gif`}
+          />
+        )}
+      </div>
+
+      <Link to="/results">Go to Results</Link>
+    </div>
+  )
+}
 
 export default Calculator
