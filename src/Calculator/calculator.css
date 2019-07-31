@@ -1,0 +1,20 @@
+.calculator {
+  display: grid;
+  grid-template:
+    "search liked"
+    "result liked";
+
+  grid-template-columns: 60% 40%;
+
+  & .search {
+    grid-area: search;
+  }
+
+  & .result {
+    grid-area: result;
+  }
+
+  & .liked {
+    grid-area: liked;
+  }
+}

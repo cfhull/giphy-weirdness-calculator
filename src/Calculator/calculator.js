@@ -25,31 +25,36 @@ const Calculator = () => {
   }
 
   return (
-    <div>
-      <input
-        onChange={e => dispatch(updateSearchTerm(e.currentTarget.value))}
-        value={searchTerm}
-      />
+    <div className="calculator">
+      <div className="search">
+        <input
+          onChange={e => dispatch(updateSearchTerm(e.currentTarget.value))}
+          value={searchTerm}
+        />
 
-      <button type="button" onClick={search}>
-        SEARCH
-      </button>
-      <input
-        type="range"
-        min="0"
-        max="10"
-        onChange={e => dispatch(updateWeirdness(e.currentTarget.value))}
-        value={weirdness}
-      />
-      <div>
-        {resultGIF.id && (
-          <img
-            src={`http://giphygifs.s3.amazonaws.com/media/${resultGIF.id}/giphy.gif`}
-          />
-        )}
+        <button type="button" onClick={search}>
+          SEARCH
+        </button>
       </div>
-
-      <Link to="/results">Go to Results</Link>
+      <div className="result">
+        <div>
+          {resultGIF.id && (
+            <img
+              src={`http://giphygifs.s3.amazonaws.com/media/${resultGIF.id}/giphy.gif`}
+            />
+          )}
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          onChange={e => dispatch(updateWeirdness(e.currentTarget.value))}
+          value={weirdness}
+        />
+      </div>
+      <div className="liked">
+        <Link to="/results">Go to Results</Link>
+      </div>
     </div>
   )
 }
