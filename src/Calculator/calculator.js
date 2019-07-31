@@ -2,36 +2,73 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './calculator.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import {
+  faThumbsUp,
+  faSpinner,
+  faTimesCircle,
+} from '@fortawesome/free-solid-svg-icons'
 
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
   updateSearchTerm,
+  updateSearchInput,
   updateWeirdness,
   updateResultGIF,
   updateLikedGIFs,
+  unlikeGIF,
 } from '../redux/actions.js'
 import { searchByWeirdness } from '../api'
 
 const Calculator = () => {
   const searchTerm = useSelector(state => state.search.searchTerm)
+  const searchInput = useSelector(state => state.search.searchInput)
   const weirdness = useSelector(state => state.search.weirdness)
   const resultGIF = useSelector(state => state.search.resultGIF)
   const isLoading = useSelector(state => state.search.isLoading)
+  const likedGIFs = useSelector(state => state.search.likedGIFs)
 
   const dispatch = useDispatch()
 
+  const likedGIFHolders = []
+  for (let i = 0; i < 5; i++) {
+    likedGIFHolders.push(
+      <div key={likedGIFs[i] ? likedGIFs[i].id : i}>
+        <div className="gif-title">
+          {(likedGIFs[i] && likedGIFs[i].title) || <>&nbsp;</>}
+        </div>
+        <div className="gif-container">
+          <img
+            src={
+              likedGIFs[i] && likedGIFs[i].id
+                ? `http://giphygifs.s3.amazonaws.com/media/${likedGIFs[i].id}/giphy.gif`
+                : 'https://via.placeholder.com/250.gif?text=Like a GIF'
+            }
+          />
+          {likedGIFs[i] && (
+            <FontAwesomeIcon
+              icon={faTimesCircle}
+              className="remove"
+              onClick={() => removeLiked(likedGIFs[i])}
+            />
+          )}
+        </div>
+      </div>
+    )
+  }
+
   function search() {
-    searchByWeirdness(searchTerm, weirdness).then(data => {
+    searchByWeirdness(searchInput, weirdness).then(data => {
       dispatch(
         updateResultGIF({
           id: data.data.data.id,
           title: data.data.data.title,
           weirdness,
+          searchTerm: searchInput,
         })
       )
       dispatch(updateWeirdness(0))
+      dispatch(updateSearchTerm(searchInput))
     })
   }
 
@@ -44,6 +81,7 @@ const Calculator = () => {
           id: data.data.data.id,
           title: data.data.data.title,
           weirdness: newWeirdness,
+          searchTerm,
         })
       )
       dispatch(updateWeirdness(newWeirdness))
@@ -52,6 +90,10 @@ const Calculator = () => {
 
   function likeGIF() {
     dispatch(updateLikedGIFs(resultGIF))
+  }
+
+  function removeLiked(gif) {
+    dispatch(unlikeGIF(gif))
   }
 
   return (
@@ -74,17 +116,17 @@ const Calculator = () => {
             <input
               id="search"
               type="text"
-              onChange={e => dispatch(updateSearchTerm(e.currentTarget.value))}
-              value={searchTerm}
+              onChange={e => dispatch(updateSearchInput(e.currentTarget.value))}
+              value={searchInput}
             />
-            <button type="button" onClick={search} disabled={!searchTerm}>
+            <button type="button" onClick={search} disabled={!searchInput}>
               SEARCH
             </button>
           </div>
         </div>
       </div>
       <div className="result">
-        <h1>Your Result</h1>
+        <h1>YOUR RESULT</h1>
         <div className="gif-title">{resultGIF.title || <>&nbsp;</>}</div>
         <div className="gif-container">
           {isLoading ? (
@@ -103,7 +145,11 @@ const Calculator = () => {
           type="button"
           className="btn-like"
           onClick={likeGIF}
-          disabled={!resultGIF.id}
+          disabled={
+            !resultGIF.id ||
+            likedGIFs.map(x => x.id).includes(resultGIF.id) ||
+            likedGIFs.map(x => x.searchTerm).includes(searchTerm)
+          }
         >
           <FontAwesomeIcon icon={faThumbsUp} />
         </button>
@@ -120,7 +166,25 @@ const Calculator = () => {
         </div>
       </div>
       <div className="liked">
-        <Link to="/results">Go to Results</Link>
+        <h1>YOUR LIKED GIFS</h1>
+        <div className="liked-gifs">{likedGIFHolders}</div>
+        <div className="calculate">
+          <Link to="/results">
+            <button type="button" disabled={likedGIFs.length < 5}>
+              Calculate My Weirdness Score
+            </button>
+          </Link>
+          {likedGIFs.length < 5 ? (
+            <p>
+              You must <i>Like</i> {5 - likedGIFs.length} more GIF
+              {likedGIFs.length < 4 && 's'} to calculate your score
+            </p>
+          ) : (
+            <p>
+              <>&nbsp;</>
+            </p>
+          )}
+        </div>
       </div>
     </div>
   )
