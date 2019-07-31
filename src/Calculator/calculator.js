@@ -117,6 +117,11 @@ const Calculator = () => {
               id="search"
               type="text"
               onChange={e => dispatch(updateSearchInput(e.currentTarget.value))}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && searchInput) {
+                  search()
+                }
+              }}
               value={searchInput}
             />
             <button type="button" onClick={search} disabled={!searchInput}>
