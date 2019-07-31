@@ -1,13 +1,33 @@
 .calculator {
+  height: calc(100% - 100px);
   display: grid;
   grid-template:
-    "search liked"
-    "result liked";
+    "search liked" 40%
+    "result liked" 60% / 60% 40%;
 
-  grid-template-columns: 60% 40%;
+  & .search,
+  & .result,
+  & .liked {
+    padding: var(--container-padding);
+    border: var(--border);
+  }
 
   & .search {
     grid-area: search;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & .description {
+    }
+
+    & .search-input-btn {
+      display: flex;
+
+      & button {
+        margin-left: -2px;
+      }
+    }
   }
 
   & .result {

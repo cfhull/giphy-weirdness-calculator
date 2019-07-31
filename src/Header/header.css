@@ -1,9 +1,9 @@
 header {
   background-color: var(--header-bg-color);
   height: 100px;
-  line-height: 100px;
+  line-height: calc(100px - var(--container-padding) * 2);
   vertical-align: middle;
-  padding: 0 20px;
+  padding: var(--container-padding);
   font-size: 24px;
   font-weight: bold;
   border: var(--border);

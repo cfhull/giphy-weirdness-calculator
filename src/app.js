@@ -8,7 +8,7 @@ import './styles.css'
 export default function App() {
   return (
     <Router>
-      <div>
+      <div className="app">
         <Header />
         <Route exact path="/" component={Calculator} />
         <Route path="/results" component={Results} />
