@@ -50,6 +50,11 @@ button {
   &:active {
     box-shadow: none;
   }
+
+  &:disabled {
+    box-shadow: -1px 1px 1px 0px rgba(0, 0, 0, 0.5);
+    opacity: 0.5;
+  }
 }
 
 h1 {

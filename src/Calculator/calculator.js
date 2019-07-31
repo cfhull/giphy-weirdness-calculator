@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   updateSearchTerm,
   updateWeirdness,
-  updateResultGif,
+  updateResultGIF,
+  updateLikedGIFs,
 } from '../redux/actions.js'
 import { searchByWeirdness } from '../api'
 
@@ -24,7 +25,11 @@ const Calculator = () => {
   function search() {
     searchByWeirdness(searchTerm, weirdness).then(data => {
       dispatch(
-        updateResultGif({ id: data.data.data.id, title: data.data.data.title })
+        updateResultGIF({
+          id: data.data.data.id,
+          title: data.data.data.title,
+          weirdness,
+        })
       )
       dispatch(updateWeirdness(0))
     })
@@ -35,10 +40,18 @@ const Calculator = () => {
       // see https://github.com/facebook/react/issues/7614
       if (!data) return
       dispatch(
-        updateResultGif({ id: data.data.data.id, title: data.data.data.title })
+        updateResultGIF({
+          id: data.data.data.id,
+          title: data.data.data.title,
+          weirdness: newWeirdness,
+        })
       )
       dispatch(updateWeirdness(newWeirdness))
     })
+  }
+
+  function likeGIF() {
+    dispatch(updateLikedGIFs(resultGIF))
   }
 
   return (
@@ -64,7 +77,7 @@ const Calculator = () => {
               onChange={e => dispatch(updateSearchTerm(e.currentTarget.value))}
               value={searchTerm}
             />
-            <button type="button" onClick={search}>
+            <button type="button" onClick={search} disabled={!searchTerm}>
               SEARCH
             </button>
           </div>
@@ -86,7 +99,12 @@ const Calculator = () => {
             />
           )}
         </div>
-        <button type="button" className="btn-like">
+        <button
+          type="button"
+          className="btn-like"
+          onClick={likeGIF}
+          disabled={!resultGIF.id}
+        >
           <FontAwesomeIcon icon={faThumbsUp} />
         </button>
         <div className="weirdness-selector">
