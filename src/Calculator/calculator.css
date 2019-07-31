@@ -32,6 +32,42 @@
 
   & .result {
     grid-area: result;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    & h1 {
+      align-self: flex-start;
+    }
+
+    & .gif-title {
+      text-align: center;
+    }
+
+    & .gif-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      height: 250px;
+
+      & img {
+        margin: 0 auto;
+        max-width: 250px;
+        max-height: 250px;
+      }
+    }
+
+    & .btn-like {
+      height: 23px;
+      width: 69px;
+    }
+
+    & .weirdness-selector,
+    & .weirdness-selector input {
+      width: 100%;
+    }
   }
 
   & .liked {

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './calculator.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -15,12 +17,27 @@ const Calculator = () => {
   const searchTerm = useSelector(state => state.search.searchTerm)
   const weirdness = useSelector(state => state.search.weirdness)
   const resultGIF = useSelector(state => state.search.resultGIF)
+  const isLoading = useSelector(state => state.search.isLoading)
 
   const dispatch = useDispatch()
 
   function search() {
     searchByWeirdness(searchTerm, weirdness).then(data => {
-      dispatch(updateResultGif({ id: data.data.data.id }))
+      dispatch(
+        updateResultGif({ id: data.data.data.id, title: data.data.data.title })
+      )
+      dispatch(updateWeirdness(0))
+    })
+  }
+
+  function changeWeirdness(newWeirdness) {
+    searchByWeirdness(searchTerm, newWeirdness).then(data => {
+      // see https://github.com/facebook/react/issues/7614
+      if (!data) return
+      dispatch(
+        updateResultGif({ id: data.data.data.id, title: data.data.data.title })
+      )
+      dispatch(updateWeirdness(newWeirdness))
     })
   }
 
@@ -54,20 +71,35 @@ const Calculator = () => {
         </div>
       </div>
       <div className="result">
-        <div>
-          {resultGIF.id && (
+        <h1>Your Result</h1>
+        <div className="gif-title">{resultGIF.title || <>&nbsp;</>}</div>
+        <div className="gif-container">
+          {isLoading ? (
+            <FontAwesomeIcon icon={faSpinner} size="4x" spin />
+          ) : (
             <img
-              src={`http://giphygifs.s3.amazonaws.com/media/${resultGIF.id}/giphy.gif`}
+              src={
+                resultGIF.id
+                  ? `http://giphygifs.s3.amazonaws.com/media/${resultGIF.id}/giphy.gif`
+                  : 'https://via.placeholder.com/250.gif?text=Waiting for Search'
+              }
             />
           )}
         </div>
-        <input
-          type="range"
-          min="0"
-          max="10"
-          onChange={e => dispatch(updateWeirdness(e.currentTarget.value))}
-          value={weirdness}
-        />
+        <button type="button" className="btn-like">
+          <FontAwesomeIcon icon={faThumbsUp} />
+        </button>
+        <div className="weirdness-selector">
+          <input
+            type="range"
+            min="0"
+            max="10"
+            step="1"
+            onChange={e => changeWeirdness(e.currentTarget.value)}
+            value={weirdness}
+          />
+          <label>Weirdness: {weirdness}</label>
+        </div>
       </div>
       <div className="liked">
         <Link to="/results">Go to Results</Link>

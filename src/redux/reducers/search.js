@@ -4,6 +4,7 @@ const initialState = {
   resultGIF: {
     id: '',
   },
+  isLoading: false,
 }
 
 export default function(state = initialState, action) {
@@ -14,6 +15,8 @@ export default function(state = initialState, action) {
       return { ...state, weirdness: action.payload.weirdness }
     case 'UPDATE_RESULT_GIF':
       return { ...state, resultGIF: action.payload.gif }
+    case 'UPDATE_IS_LOADING':
+      return { ...state, isLoading: action.payload.isLoading }
     default:
       return state
   }

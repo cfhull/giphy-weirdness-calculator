@@ -16,7 +16,7 @@ body {
   --bg-primary: #ffffff;
   --bg-secondary: #fcfcfc;
   --border: 1px solid #e0e0e0;
-  --container-padding: 20px;
+  --container-padding: 25px;
 }
 
 .app {
@@ -50,4 +50,12 @@ button {
   &:active {
     box-shadow: none;
   }
+}
+
+h1 {
+  font-size: 12px;
+}
+
+img {
+  display: block;
 }
