@@ -1,0 +1,1 @@
+### Giphy Weirdness Calculator
