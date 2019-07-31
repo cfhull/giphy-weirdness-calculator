@@ -4,3 +4,16 @@
   box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  font-family: sans-serif;
+  color: var(--text-color);
+}
+
+:root {
+  --header-bg-color: #efefef;
+  --text-color: #757575;
+  --bg-primary: #ffffff;
+  --bg-secondary: #fcfcfc;
+  --border: 1px solid #e0e0e0;
+}
