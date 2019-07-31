@@ -10,8 +10,12 @@ export default function App() {
     <Router basename="/">
       <div className="app">
         <Header />
-        <Route exact path="/" component={Calculator} />
-        <Route path="/results" component={Results} />
+        <Route
+          exact
+          path={process.env.PUBLIC_URL + '/'}
+          component={Calculator}
+        />
+        <Route path={process.env.PUBLIC_URL + '/results'} component={Results} />
       </div>
     </Router>
   )
