@@ -7,7 +7,7 @@ import './styles.css'
 
 export default function App() {
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router>
       <div className="app">
         <Header />
         <Route exact path="/" component={Calculator} />
