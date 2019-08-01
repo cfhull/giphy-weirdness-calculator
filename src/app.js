@@ -7,15 +7,11 @@ import './styles.css'
 
 export default function App() {
   return (
-    <Router basename="/">
+    <Router basename={process.env.PUBLIC_URL}>
       <div className="app">
         <Header />
-        <Route
-          exact
-          path={process.env.PUBLIC_URL + '/'}
-          component={Calculator}
-        />
-        <Route path={process.env.PUBLIC_URL + '/results'} component={Results} />
+        <Route exact path="/" component={Calculator} />
+        <Route path="/results" component={Results} />
       </div>
     </Router>
   )
